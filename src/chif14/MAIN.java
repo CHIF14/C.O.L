@@ -7,7 +7,7 @@ package chif14;
 public class MAIN {
     
     public static void main(String[] args) {
-        
+      System.out.println("hi");
     }
     
 }
