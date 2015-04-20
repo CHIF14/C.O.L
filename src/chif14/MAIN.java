@@ -1,5 +1,6 @@
 package chif14;
 
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.logging.Level;
@@ -15,10 +16,13 @@ public class MAIN implements Runnable, KeyListener{
     
     Draw dw;
     JFrame frame;
-    boolean playerxPlus = false, playerxMinus = false, playeryPlus = false, playeryMinus = false;
+    private boolean playerxPlus = false, playerxMinus = false, 
+	    playeryPlus = false, playeryMinus = false;
+    private boolean fullscreen = false, firstStart = true;
     
     public MAIN()
     {
+	new Imports().importGameImages();
         newFrame();
     }
     
@@ -26,16 +30,26 @@ public class MAIN implements Runnable, KeyListener{
     {
         frame = new JFrame("C.O.L");
         frame.setSize(800,450);
+	
+	if(fullscreen) {
+	  frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+	}
+	
+	// Added for fullscreen purposes - press ALT+F4 until better fix
+	frame.setUndecorated(true);
         frame.addKeyListener(this);
         
-        dw = new Draw();
+        if(firstStart) {
+	  dw = new Draw();
+	}
         frame.add(dw);
-        
+	
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         
-        new Thread(this).start();
+        if(firstStart) new Thread(this).start();
+	firstStart = false;
     }
     
     public void run()
@@ -58,7 +72,32 @@ public class MAIN implements Runnable, KeyListener{
     }
     
     public static void main(String[] args) {new MAIN();}
-
+    
+    private void switchFullscreen() {
+      // Only did the math for 16:9
+      if((Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 16)
+	      * 9 != Toolkit.getDefaultToolkit().getScreenSize().getHeight()) {
+	return;
+      }
+      
+      if(fullscreen) {
+	fullscreen = false;
+	frame.dispose();
+	newFrame();
+	dw.playerSize = 25;
+	dw.velocity = 1;
+	dw.playerX *= .416f;
+	dw.playerY *= .416f;
+      } else {
+	fullscreen = true;
+	frame.dispose();
+	newFrame();
+	dw.playerSize = 60;
+	dw.velocity = 2.4f;
+	dw.playerX *= 2.4f;
+	dw.playerY *= 2.4f;
+      }
+    }
     
     // <editor-fold defaultstate="collapsed" desc="KeyListener">
     @Override
@@ -70,6 +109,7 @@ public class MAIN implements Runnable, KeyListener{
         if(e.getKeyCode() == KeyEvent.VK_S) playeryPlus = true;
         if(e.getKeyCode() == KeyEvent.VK_A) playerxMinus = true;
         if(e.getKeyCode() == KeyEvent.VK_D) playerxPlus = true;
+	if(e.getKeyCode() == KeyEvent.VK_F) switchFullscreen();
     }
 
     @Override

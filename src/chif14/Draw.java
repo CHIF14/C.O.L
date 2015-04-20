@@ -11,16 +11,30 @@ import javax.swing.JPanel;
 public class Draw extends JPanel{
     
     public float playerX = 50, playerY = 50;
+    public int playerSize = 25;
+    public float velocity = 1;
     
     protected void paintComponent(Graphics g)
     {
 	super.paintComponent(g);
         g.setColor(Color.orange);
-        g.fillRect((int)playerX, (int)playerY, 25, 25);
+//        g.fillRect((int)playerX, (int)playerY, playerSize, playerSize);
+	g.drawImage(Imports.image.get(Imports.player), (int) playerX, (int) playerY, playerSize, playerSize, this);
     }
-    public void playerXp() {playerX++;}
-    public void playerXm() {playerX--;}
-    public void playerYp() {playerY++;}
-    public void playerYm() {playerY--;}
+    
+    // <editor-fold defaultstate="collapsed" desc="Player movement">
+    public void playerXp() {
+      if((playerX + playerSize) < getWidth()) playerX += velocity;
+    }
+    public void playerXm() {
+      if(playerX > 0) playerX -= velocity;
+    }
+    public void playerYp() {
+      if((playerY + playerSize) < getHeight()) playerY += velocity;
+    }
+    public void playerYm() {
+      if(playerY > 0) playerY -= velocity;
+    }
+    // </editor-fold>
     
 }
