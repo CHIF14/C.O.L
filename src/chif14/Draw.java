@@ -14,6 +14,7 @@ public class Draw extends JPanel{
     
     protected void paintComponent(Graphics g)
     {
+	super.paintComponent(g);
         g.setColor(Color.orange);
         g.fillRect((int)playerX, (int)playerY, 25, 25);
     }
