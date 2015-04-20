@@ -73,13 +73,7 @@ public class MAIN implements Runnable, KeyListener{
     
     public static void main(String[] args) {new MAIN();}
     
-    private void switchFullscreen() {
-      // Only did the math for 16:9
-      if((Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 16)
-	      * 9 != Toolkit.getDefaultToolkit().getScreenSize().getHeight()) {
-	return;
-      }
-      
+    private void switchFullscreen() {      
       if(fullscreen) {
 	fullscreen = false;
 	frame.dispose();
@@ -92,10 +86,12 @@ public class MAIN implements Runnable, KeyListener{
 	fullscreen = true;
 	frame.dispose();
 	newFrame();
-	dw.playerSize = 60;
-	dw.velocity = 2.4f;
-	dw.playerX *= 2.4f;
-	dw.playerY *= 2.4f;
+	float numberX = (1f/800f) * (float) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+	float numberY = (1f/450f) * (float) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+	dw.playerSize *= numberX;
+	dw.velocity = numberX;
+	dw.playerX *= numberX;
+	dw.playerY *= numberY;
       }
     }
     
